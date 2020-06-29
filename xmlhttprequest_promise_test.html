@@ -1,0 +1,47 @@
+<button id="ajaxButton" type="button">Make a request</button>
+
+<script>
+(function() {
+  var httpRequest;
+  document.getElementById("ajaxButton").addEventListener('click', makeRequest);
+
+  function makeRequest() {
+    httpRequest = new XMLHttpRequest();
+
+    if(!httpRequest) {
+      alert('XMLHTTP 인스턴스를 만들 수가 없어요 ㅠㅠ');
+      return false;
+    }
+    httpRequest.onreadystatechange = alertContents;
+    httpRequest.open('GET', 'http://172.10.12.71:8080/jsp/json/store.json');
+    console.log(": open");
+    getData(httpRequest).then(function(resolvedData) 
+    {
+        console.log(": then resolvedData");
+        console.log(resolvedData); // 100
+    });
+    console.log(": makerequest End");
+  }
+
+  function getData(httpRequest) {
+  return new Promise(function(resolve, reject) {
+    httpRequest.send();
+    httpRequest._resolve = resolve;
+    console.log(": new Promise")
+  });
+}
+
+  function alertContents() {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) 
+    {
+      if (httpRequest.status === 200) {
+    //    console.log(httpRequest.responseText);
+        console.log(": onreadystatechange")
+        httpRequest._resolve(httpRequest.responseText);
+      } else {
+        alert('request에 뭔가 문제가 있어요.');
+      }
+    }
+  }
+})();
+</script>

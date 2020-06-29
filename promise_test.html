@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>very simple Promise Test Sample
+  When you click the input, the promise is started and then print the result on the console
+</p>
+
+<form>
+  <input type="button" id="myCheck" onclick="run()" value="fffffffffffffff">
+</form>
+
+<script>
+function trace(text) 
+{
+  console.log(text);
+}
+
+function run()
+{
+  // resolve()의 결과 값 data를 resolvedData로 받음
+  getData().then(function(resolvedData) {
+    trace(resolvedData); // 100
+});
+}
+
+
+function getData() {
+  return new Promise(function(resolve, reject) {
+    var data = 100;
+    resolve(data);
+  });
+}
+
+
+
+</script>
+
+
+</body>
+</html>
