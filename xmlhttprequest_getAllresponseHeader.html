@@ -1,0 +1,50 @@
+<button id="ajaxButton" type="button">Make a request</button>
+
+<script>
+(function() {
+/*
+* XMLHttpRequest 통신 후 getAllResponseHeaders 파싱하는 예제
+* IE8 이하는 지원 안됨
+*/
+
+  var httpRequest;
+  document.getElementById("ajaxButton").addEventListener('click', makeRequest);
+
+  function makeRequest() {
+    httpRequest = new XMLHttpRequest();
+
+    if(!httpRequest) {
+      alert('XMLHTTP 인스턴스를 만들 수가 없어요 ㅠㅠ');
+      return false;
+    }
+    httpRequest.onreadystatechange = alertContents;
+    httpRequest.open('GET', 'http://172.10.12.71:8080/jsp/json/store.json');
+    console.log(": open");
+    httpRequest.send();
+  }
+
+
+  function alertContents() {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) 
+    {
+      if (httpRequest.status === 200) {
+    //    console.log(httpRequest.responseText);
+        var allResponseHeaders = this.getAllResponseHeaders();
+		var arr = allResponseHeaders.split('\r\n');
+		var headers = arr.reduce(function (acc, current, i){
+			  var parts = current.split(': ');
+			  acc[parts[0]] = parts[1];
+			  return acc;
+		}, {});
+        console.log(headers);
+        console.log(": onreadystatechange")
+        //httpRequest._resolve(httpRequest.responseText);
+      } else {
+        alert('request에 뭔가 문제가 있어요.');
+      }
+    }
+  }
+  //var trace = console.log;
+})();
+</script>
+
